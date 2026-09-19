@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Calculateur de moyenne</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #1c2430;
+    --muted: #5b6572;
+    --line: #dde2e8;
+    --bg: #f7f8fa;
+    --accent: #33507a;
+    --danger: #b3413a;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: 'Inter', sans-serif;
+    display: flex;
+    justify-content: center;
+    padding: 50px 20px 100px;
+  }
+  main { width: 100%; max-width: 480px; }
+  a.back {
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 0.85rem;
+  }
+  h1 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin: 14px 0 28px;
+  }
+  .average-box {
+    background: white;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 22px;
+    margin-bottom: 24px;
+    text-align: center;
+  }
+  .average-value {
+    font-size: 2.6rem;
+    font-weight: 700;
+    color: var(--accent);
+    line-height: 1;
+  }
+  .average-label {
+    color: var(--muted);
+    font-size: 0.85rem;
+    margin-top: 6px;
+  }
+  .row {
+    display: grid;
+    grid-template-columns: 1fr 90px 90px 32px;
+    gap: 8px;
+    margin-bottom: 8px;
+  }
+  .row input {
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    padding: 9px 10px;
+    font-family: inherit;
+    font-size: 0.9rem;
+    width: 100%;
+  }
+  .row input:focus {
+    outline: none;
+    border-color: var(--accent);
+  }
+  .remove {
+    background: none;
+    border: none;
+    color: var(--muted);
+    cursor: pointer;
+    font-size: 1.1rem;
+  }
+  .remove:hover { color: var(--danger); }
+  .headers {
+    display: grid;
+    grid-template-columns: 1fr 90px 90px 32px;
+    gap: 8px;
+    color: var(--muted);
+    font-size: 0.75rem;
+    margin-bottom: 6px;
+    padding: 0 2px;
+  }
+  button.add {
+    margin-top: 14px;
+    width: 100%;
+    background: none;
+    border: 1px dashed var(--line);
+    border-radius: 6px;
+    padding: 10px;
+    color: var(--muted);
+    font-family: inherit;
+    font-size: 0.9rem;
+    cursor: pointer;
+  }
+  button.add:hover { border-color: var(--accent); color: var(--accent); }
+</style>
+</head>
+<body>
+<main>
+  <a class="back" href="index.html">← Retour</a>
+  <h1>Calculateur de moyenne</h1>
+
+  <div class="average-box">
+    <div class="average-value" id="avgValue">-</div>
+    <div class="average-label">Moyenne générale</div>
+  </div>
+
+  <div class="headers">
+    <span>Matière / note</span>
+    <span>Note</span>
+    <span>Coef.</span>
+    <span></span>
+  </div>
+  <div id="rows"></div>
+  <button class="add" id="addRow">+ Ajouter une ligne</button>
+</main>
+
+<script>
+  const rowsEl = document.getElementById('rows');
+  const avgEl = document.getElementById('avgValue');
+
+  function load() {
+    const saved = localStorage.getItem('moyenne_data');
+    return saved ? JSON.parse(saved) : [{ label: '', note: '', coef: '1' }];
+  }
+
+  function save() {
+    const data = [...rowsEl.children].map(row => ({
+      label: row.querySelector('.label').value,
+      note: row.querySelector('.note').value,
+      coef: row.querySelector('.coef').value
+    }));
+    localStorage.setItem('moyenne_data', JSON.stringify(data));
+    compute();
+  }
+
+  function compute() {
+    let total = 0, coefSum = 0;
+    rowsEl.querySelectorAll('.row').forEach(row => {
+      const note = parseFloat(row.querySelector('.note').value);
+      const coef = parseFloat(row.querySelector('.coef').value) || 1;
+      if (!isNaN(note)) {
+        total += note * coef;
+        coefSum += coef;
+      }
+    });
+    avgEl.textContent = coefSum > 0 ? (total / coefSum).toFixed(2) : '-';
+  }
+
+  function addRow(data = { label: '', note: '', coef: '1' }) {
+    const row = document.createElement('div');
+    row.className = 'row';
+    row.innerHTML = `
+      <input class="label" type="text" placeholder="Nom" value="${data.label}">
+      <input class="note" type="number" step="0.01" placeholder="/20" value="${data.note}">
+      <input class="coef" type="number" step="0.5" placeholder="1" value="${data.coef}">
+      <button class="remove">×</button>
+    `;
+    row.querySelectorAll('input').forEach(i => i.addEventListener('input', save));
+    row.querySelector('.remove').addEventListener('click', () => {
+      row.remove();
+      save();
+    });
+    rowsEl.appendChild(row);
+  }
+
+  document.getElementById('addRow').addEventListener('click', () => {
+    addRow();
+    save();
+  });
+
+  load().forEach(d => addRow(d));
+  compute();
+</script>
+</body>
+</html>
