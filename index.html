@@ -1,1 +1,95 @@
-bientôt bro
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Outils</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #1c2430;
+    --muted: #5b6572;
+    --line: #dde2e8;
+    --bg: #f7f8fa;
+    --accent: #33507a;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: 'Inter', sans-serif;
+    display: flex;
+    justify-content: center;
+    padding: 60px 20px;
+  }
+  main { width: 100%; max-width: 520px; }
+  h1 {
+    font-size: 1.6rem;
+    font-weight: 600;
+    margin: 0 0 6px;
+  }
+  .sub {
+    color: var(--muted);
+    font-size: 0.95rem;
+    margin: 0 0 36px;
+  }
+  ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    border-top: 1px solid var(--line);
+  }
+  li { border-bottom: 1px solid var(--line); }
+  a.tool {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 18px 4px;
+    text-decoration: none;
+    color: var(--ink);
+  }
+  a.tool:hover .name { color: var(--accent); }
+  .name { font-weight: 500; transition: color 0.15s; }
+  .desc { color: var(--muted); font-size: 0.85rem; margin-top: 2px; }
+  .arrow { color: var(--muted); font-size: 1.1rem; }
+</style>
+</head>
+<body>
+<main>
+  <h1>Outils pour la classe</h1>
+  <p class="sub">Petits outils pratiques, gratuits, sans compte.</p>
+  <ul>
+    <li>
+      <a class="tool" href="moyenne.html">
+        <div>
+          <div class="name">Calculateur de moyenne</div>
+          <div class="desc">Ajoutez vos notes, la moyenne se sauvegarde</div>
+        </div>
+        <span class="arrow">→</span>
+      </a>
+    </li>
+    <li>
+      <a class="tool" href="chrono.html">
+        <div>
+          <div class="name">Chronomètre</div>
+          <div class="desc">Minuteur avec bougie qui descend</div>
+        </div>
+        <span class="arrow">→</span>
+      </a>
+    </li>
+    <li>
+      <a class="tool" href="aleatoire.html">
+        <div>
+          <div class="name">Nombre aléatoire</div>
+          <div class="desc">Tirage au sort dans une plage choisie</div>
+        </div>
+        <span class="arrow">→</span>
+      </a>
+    </li>
+  </ul>
+</main>
+</body>
+</html>
